@@ -340,7 +340,7 @@ Their pioneering work has enabled AI innovation and capacity building in fraud d
 
 - **Issues**: [GitHub Issues](https://github.com/yourusername/picket-ai/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/yourusername/picket-ai/discussions)
-- **Email**: your.email@example.com
+- **Email**: pickel.ai@gmail.com
 
 
 ##  Performance Benchmarks
@@ -361,6 +361,7 @@ Their pioneering work has enabled AI innovation and capacity building in fraud d
 *Empowering secure mobile money transactions across Sub-Saharan Africa*
 
 </div>
+
 
 
 
