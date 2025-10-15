@@ -7,24 +7,24 @@
 ![XGBoost](https://img.shields.io/badge/XGBoost-2.0+-green.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-## 🌟 Overview
+##  Overview
 
 Picket AI is a cutting-edge fraud detection system built specifically for Sub-Saharan African mobile money transactions. Using advanced machine learning and real-time confidence scoring, it helps financial institutions identify and prevent fraudulent transactions before they occur.
 
-### ✨ Key Features
+###  Key Features
 
-- **🎯 Real-Time Fraud Detection** - Instant analysis of mobile money transactions
-- **🤖 Advanced Confidence Scoring** - Multi-method confidence evaluation using:
+- ** Real-Time Fraud Detection** - Instant analysis of mobile money transactions
+- ** Advanced Confidence Scoring** - Multi-method confidence evaluation using:
   - Probability distance analysis
   - Tree variance measurement
   - Feature sensitivity testing
   - Ensemble consistency checks
-- **📊 Interactive Dashboard** - Beautiful, user-friendly interface with real-time analytics
-- **🔍 Explainable AI** - Clear risk factor breakdowns and human-readable recommendations
-- **📈 Comprehensive Analytics** - Deep insights into fraud patterns and transaction trends
-- **🧪 Demo Playground** - Pre-loaded test scenarios for quick evaluation
+- ** Interactive Dashboard** - Beautiful, user-friendly interface with real-time analytics
+- ** Explainable AI** - Clear risk factor breakdowns and human-readable recommendations
+- ** Comprehensive Analytics** - Deep insights into fraud patterns and transaction trends
+- ** Demo Playground** - Pre-loaded test scenarios for quick evaluation
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 
@@ -62,7 +62,7 @@ streamlit run app.py
    
    Navigate to `http://localhost:8501`
 
-## 📦 Dependencies
+##  Dependencies
 
 ```txt
 streamlit>=1.28.0
@@ -72,10 +72,10 @@ pandas>=2.0.0
 plotly>=5.17.0
 ```
 
-## 🏗️ Project Structure
+##  Project Structure
 
 ```
-picket-ai/
+streamlit/
 ├── app.py                          # Main Streamlit application
 ├── models/
 │   └── 3momtsim_fraud_model.bin   # Trained XGBoost model
@@ -84,7 +84,7 @@ picket-ai/
 └── .gitignore                      # Git ignore rules
 ```
 
-## 🎯 Usage Guide
+##  Usage Guide
 
 ### 1. Fraud Detection Magic
 
@@ -128,16 +128,16 @@ Test with pre-configured scenarios:
 - **Risky Withdrawal Alert**: Account emptying behavior
 - **Happy Normal Payment**: Legitimate transaction baseline
 
-## 🧠 Model Details
+##  Model Details
 
 ### Dataset: MomtSim
 
 Picket AI is built on the **MomtSim dataset**, a groundbreaking mobile money fraud dataset created by researchers from **Makerere University, Uganda**:
 
-- **📚 Researchers**: Mr. Denish Azamuke, Dr. Marriette Katarahweire, Engineer Bainomugisha
-- **🌍 Focus**: Sub-Saharan African mobile money ecosystems
-- **📊 Size**: 1.72 million transactions across 144 time steps
-- **🎯 Fraud Rate**: 10.2% overall (30.8% in TRANSFER transactions)
+- ** Researchers**: Mr. Denish Azamuke, Dr. Marriette Katarahweire, Engineer Bainomugisha
+- ** Focus**: Sub-Saharan African mobile money ecosystems
+- ** Size**: 1.72 million transactions across 144 time steps
+- ** Fraud Rate**: 10.2% overall (30.8% in TRANSFER transactions)
 
 ### Model Performance
 
@@ -157,17 +157,17 @@ The model uses 45 engineered features including:
 - **Temporal features**: Time-based fraud indicators
 - **Risk features**: Statistical anomaly scores
 
-## 🔍 Key Insights
+##  Key Insights
 
 ### Critical Findings from MomtSim Data
 
-1. **🎯 Fraud Concentration**: ALL fraud occurs in TRANSFER transactions (30.8% fraud rate)
-2. **✅ Safe Types**: PAYMENT, DEPOSIT, WITHDRAWAL, DEBIT have 0% fraud
-3. **💰 Amount Pattern**: Fraudulent transactions average 2.2x smaller than legitimate ones
-4. **📈 Temporal Volatility**: Fraud rates vary from 4% to 18% across time steps
-5. **⚖️ Class Balance**: 8.85x weight applied to fraud class during training
+1. ** Fraud Concentration**: ALL fraud occurs in TRANSFER transactions (30.8% fraud rate)
+2. ** Safe Types**: PAYMENT, DEPOSIT, WITHDRAWAL, DEBIT have 0% fraud
+3. ** Amount Pattern**: Fraudulent transactions average 2.2x smaller than legitimate ones
+4. ** Temporal Volatility**: Fraud rates vary from 4% to 18% across time steps
+5. ** Class Balance**: 8.85x weight applied to fraud class during training
 
-## 🎨 Technical Architecture
+##  Technical Architecture
 
 ### Confidence Scoring System
 
@@ -192,7 +192,7 @@ ELSE:
     ELSE: BLOCK
 ```
 
-## 🌍 Why Picket AI?
+##  Why Picket AI?
 
 ### Built for Africa, By Africans
 
@@ -208,7 +208,7 @@ ELSE:
 3. **Real Confidence Metrics**: Genuine model uncertainty quantification
 4. **Beautiful UX**: Modern, intuitive interface inspired by contemporary design
 
-## 📝 API Reference
+##  API Reference
 
 ### Core Functions
 
@@ -229,7 +229,7 @@ fraud_score, confidence, method, breakdown = predict_fraud_with_confidence(
 )
 ```
 
-## 🤝 Contributing
+##  Contributing
 
 We welcome contributions! Here's how you can help:
 
@@ -248,11 +248,11 @@ We welcome contributions! Here's how you can help:
 - Documentation improvements
 - Performance optimization
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 ### Dataset Authors
 
@@ -270,26 +270,14 @@ Their pioneering work has enabled AI innovation and capacity building in fraud d
 - **Plotly** - Beautiful interactive visualizations
 - **Pandas & NumPy** - Data processing powerhouses
 
-## 📞 Contact & Support
+##  Contact & Support
 
 - **Issues**: [GitHub Issues](https://github.com/yourusername/picket-ai/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/yourusername/picket-ai/discussions)
 - **Email**: your.email@example.com
 
-## 🗺️ Roadmap
 
-### Coming Soon
-
-- [ ] REST API for integration
-- [ ] Batch processing capabilities
-- [ ] Custom model training interface
-- [ ] Multi-language support
-- [ ] Mobile application
-- [ ] Real-time monitoring dashboard
-- [ ] Advanced anomaly detection
-- [ ] Integration with major payment platforms
-
-## 📊 Performance Benchmarks
+##  Performance Benchmarks
 
 | Model | AUC-ROC | Precision | Recall | F1-Score |
 |-------|---------|-----------|--------|----------|
@@ -306,7 +294,6 @@ Their pioneering work has enabled AI innovation and capacity building in fraud d
 
 *Empowering secure mobile money transactions across Sub-Saharan Africa*
 
-[⭐ Star us on GitHub](https://github.com/yourusername/picket-ai) | [🐛 Report Bug](https://github.com/yourusername/picket-ai/issues) | [💡 Request Feature](https://github.com/yourusername/picket-ai/issues)
-
 </div>
+
 
