@@ -89,7 +89,7 @@ streamlit/
 
 ##  Usage Guide
 
-### 1. Fraud Detection Magic
+### 1. Fraud Detection
 
 The main interface for analyzing transactions:
 
@@ -171,6 +171,69 @@ The model uses 45 engineered features including:
 5. ** Class Balance**: 8.85x weight applied to fraud class during training
 
 ##  Technical Architecture
+
+### Multi-Layered Feature Engineering Pipeline
+
+Our fraud detection system employs a sophisticated 5-layer feature engineering approach that creates **45+ engineered features** from raw transaction data:
+
+#### 1️Base Features (13 features)
+- **Amount transformations**: Log-scaled amounts to handle skewed distributions
+- **Balance changes**: Tracking sender/recipient balance deltas
+- **Balance anomalies**: Detecting mathematical inconsistencies in balance updates
+- **Amount ratios**: Transaction amount relative to account balances
+- **Transaction type encoding**: Categorical → numerical mapping
+
+```python
+# Example: Balance error detection
+balance_error_sender = |oldBalance + change - newBalance|
+has_balance_error = (sender_error > 0) OR (recipient_error > 0)
+```
+
+#### 2️ Temporal Patterns (8 features)
+- **Cyclical time features**: Hour of day, day of week patterns
+- **Periodic encoding**: Sine/cosine transformations for time cyclicality
+- **Risk windows**: Night transactions (10pm-6am), weekend activity
+- **Time-based signals**: Capturing fraud patterns across 144 time steps
+
+```python
+# Cyclical encoding preserves periodicity
+hour_sin = sin(2π × hour / 24)
+hour_cos = cos(2π × hour / 24)
+```
+
+#### 3️ Network Graph Features (7 features)
+- **Relationship mapping**: Unique counterparty counts per user
+- **Interaction frequency**: Sender-recipient pair transaction history
+- **First-time interactions**: Detecting novel relationships (fraud indicator)
+- **Network centrality**: User importance within transaction network
+
+```python
+# Network centrality proxy
+sender_centrality = unique_recipients / max_recipients
+is_first_interaction = (pair_count == 1)
+```
+
+#### 4️ User Behavior Aggregations (17 features)
+**Leakage-free temporal aggregations** using only past data:
+- **Cumulative counters**: Progressive transaction counts per user
+- **Expanding statistics**: Mean, std, max of historical amounts
+- **Z-score analysis**: Current transaction vs. user's historical pattern
+- **Velocity features**: Transaction frequency over 5/10/20 step windows
+- **Burst detection**: Multiple transactions in rapid succession
+
+```python
+# Example: Amount anomaly detection
+user_amount_zscore = (current_amount - user_avg_amount) / user_std_amount
+is_burst = (time_since_last_transaction < 1)
+```
+
+#### 5️ Interaction & Non-Linear Features
+- **Cross-feature interactions**: velocity × amount, balance ratios
+- **Polynomial features**: Squared terms for non-linear patterns
+- **Ratio comparisons**: Sender vs recipient balance dynamics
+
+
+Confidence Scoring System
 
 ### Confidence Scoring System
 
@@ -298,6 +361,7 @@ Their pioneering work has enabled AI innovation and capacity building in fraud d
 *Empowering secure mobile money transactions across Sub-Saharan Africa*
 
 </div>
+
 
 
 
