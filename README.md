@@ -37,13 +37,13 @@ pip package manager
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/picket-ai.git
-cd picket-ai
+git clone https://github.com/yourusername/picket-ai.git](https://github.com/MarthaKJ/FraudGuard-AI.git)
+cd Streamlit
 ```
 
 2. **Install dependencies**
 ```bash
-pip install -r requirements.txt
+pip install 
 ```
 
 3. **Set up your model**
@@ -295,5 +295,6 @@ Their pioneering work has enabled AI innovation and capacity building in fraud d
 *Empowering secure mobile money transactions across Sub-Saharan Africa*
 
 </div>
+
 
 
