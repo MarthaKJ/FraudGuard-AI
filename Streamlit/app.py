@@ -428,13 +428,13 @@ def get_friendly_message(fraud_score, confidence_score, recommendation):
         if confidence_percent >= 70:
             messages.append(f"I'm {confidence_percent:.0f}% confident in this assessment - the patterns are clear.")
         else:
-            messages.append(f"I'm only {confidence_percent:.0f}% confident, which is too low for financial decisions - blocking for safety.")
+            messages.append(f"I'm  {confidence_percent:.0f}% confident, which is too low for financial decisions - blocking for safety.")
             
     elif recommendation == "REVIEW" or recommendation == "HUMAN_REVIEW_REQUIRED":
         if fraud_percent >= 50:
             messages.append(f"This transaction has a {fraud_percent:.0f}% fraud probability - it's in that tricky zone where human judgment is essential.")
         else:
-            messages.append(f"While the fraud score is {fraud_percent:.0f}%, my confidence is only {confidence_percent:.0f}% - too uncertain for automatic processing.")
+            messages.append(f"While the fraud score is {fraud_percent:.0f}%, my confidence is {confidence_percent:.0f}% - too uncertain for automatic processing.")
         
         messages.append(f"A human expert should definitely review this before making any decision.")
             
@@ -1280,7 +1280,7 @@ def demo_data_page(classifier, model_loaded):
                                 else:
                                     st.success("✅ LOW RISK - APPROVE")
                     else:
-                        st.error(" Model not loaded")
+                        st.error("🚫 Model not loaded")
 
 def model_info_page():
     st.markdown('<h2 class="rainbow-text">About the dataset</h2>', unsafe_allow_html=True)
