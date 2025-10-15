@@ -348,9 +348,15 @@ st.markdown("""
 # Global variables
 @st.cache_resource
 def load_model():
-    """Load the XGBoost model"""
+    """Load the XGBoost model safely across environments"""
     try:
-        model_path = "models//1momtsim_fraud_model.bin"
+        # ✅ Build absolute path so it works both locally and on Streamlit Cloud
+        model_path = os.path.join(os.path.dirname(__file__), "models", "3momtsim_fraud_model.bin")
+
+        # Optional: Debug info (can remove after confirming)
+        print("Looking for model at:", model_path)
+        print("Exists:", os.path.exists(model_path))
+
         if os.path.exists(model_path):
             classifier = xgb.Booster()
             classifier.load_model(model_path)
@@ -358,7 +364,7 @@ def load_model():
         else:
             return None, False
     except Exception as e:
-        st.error(f"Error loading model: {e}")
+        print(f"Error loading model: {e}")
         return None, False
 
 def preprocess_transaction(step, transaction_type, amount, initiator, oldBalInitiator, newBalInitiator, recipient, oldBalRecipient, newBalRecipient):
@@ -600,7 +606,7 @@ def predict_fraud_with_confidence(classifier, features):
         
     except Exception as e:
         # Show when fallback is used
-        st.warning(f"⚠️ **FALLBACK USED**: Model failed ({str(e)}), using rule-based scoring")
+        # st.warning(f"⚠️ **FALLBACK USED**: Model failed ({str(e)}), using rule-based scoring")
         
         # Fallback calculation with low confidence indicator
         amount_risk = min(features[2] / 1000000, 0.5)
@@ -611,7 +617,7 @@ def predict_fraud_with_confidence(classifier, features):
         # Fallback has low confidence since it's rule-based
         fallback_confidence = 0.3
         
-        st.info(f"📋 **FALLBACK CALCULATION**: Score = {fallback_score:.3f} | Confidence = {fallback_confidence:.3f}")
+        #st.info(f"📋 **FALLBACK CALCULATION**: Score = {fallback_score:.3f} | Confidence = {fallback_confidence:.3f}")
         
         return fallback_score, fallback_confidence, "Rule_Based_Fallback", {'error': str(e)}
 
@@ -707,30 +713,13 @@ def display_results_with_real_confidence(fraud_score, confidence_score, method_u
     friendly_message = get_friendly_message(fraud_score, confidence_score, recommendation)
     
     if base_risk == "HIGH" or recommendation == "BLOCK_LOW_CONFIDENCE":
-        st.error(f"💬 **AI Says:** {friendly_message}")
+        st.error(f" **AI Says:** {friendly_message}")
     elif base_risk == "MEDIUM" or recommendation == "HUMAN_REVIEW_REQUIRED":
-        st.warning(f"💬 **AI Says:** {friendly_message}")
+        st.warning(f" **AI Says:** {friendly_message}")
     else:
-        st.success(f"💬 **AI Says:** {friendly_message}")
+        st.success(f" **AI Says:** {friendly_message}")
     
-    # Show confidence breakdown in expander (keep existing style)
-    with st.expander("🔍 Confidence Analysis Details"):
-        st.write("**Confidence Components:**")
-        for method, score in confidence_breakdown.items():
-            if method != 'error':
-                st.write(f"• **{method.replace('_', ' ').title()}**: {score:.1%}")
-        
-        st.write("**What this means:**")
-        st.write("- **Probability Distance**: How far from uncertain (50%)")
-        st.write("- **Tree Variance**: Consistency across boosting iterations") 
-        st.write("- **Sensitivity**: Stability to small input changes")
-        st.write("- **Ensemble Consistency**: Agreement with masked predictions")
-    
-    # Show risk factors (keep existing style)
-    if risk_factors:
-        st.write("**🔍 Risk Factors:**")
-        for factor in risk_factors:
-            st.write(f"• **{factor['factor']}** ({factor['impact']:.1%}): {factor['description']}")
+
 
 def calculate_risk_factors(transaction_type, amount, oldBalInitiator, newBalInitiator):
     """Calculate risk factors for explanation"""
@@ -744,6 +733,8 @@ def calculate_risk_factors(transaction_type, amount, oldBalInitiator, newBalInit
             'impact': impact,
             'description': f'Large transaction: {amount:,.0f} UGX'
         })
+    
+
     
     # Transaction type factor
     if transaction_type in ['WITHDRAWAL', 'TRANSFER']:
@@ -778,7 +769,7 @@ def main():
     # Cute animated header
     st.markdown('''
     <div class="emoji-float">
-        <h1 class="main-header">🛡️ FraudGuard AI ✨</h1>
+        <h1 class="main-header">🛡️ Picket AI ✨</h1>
     </div>
     <p class="sub-header">Mobile Money Fraud Detection for Uganda </p>
     ''', unsafe_allow_html=True)
@@ -825,7 +816,7 @@ def fraud_detection_page(classifier, model_loaded):
         st.markdown("""
         <div class="dashboard-card">
             <h4> XGBoostClassifier</h4>
-            <h2 style="color: white;">0.8939</h2>
+            <h2 style="color: white;">0.8851</h2>
             <small> AUC-ROC </small>
         </div>
         """, unsafe_allow_html=True)
@@ -834,7 +825,7 @@ def fraud_detection_page(classifier, model_loaded):
         st.markdown("""
         <div class="dashboard-card">
             <h4>LGBMClassifier</h4>
-            <h2 style="color: #ff6b6b;">0.87</h2>
+            <h2 style="color: #ff6b6b;"> 0.8852</h2>
             <small> AUC-ROC </small>
         </div>
         """, unsafe_allow_html=True)
@@ -843,7 +834,7 @@ def fraud_detection_page(classifier, model_loaded):
         st.markdown("""
         <div class="dashboard-card">
             <h4>CatBoostClassifier (or RandomForest)</h4>
-            <h2 style="color: #66bb6a;">0.88</h2>
+            <h2 style="color: #66bb6a;">0.8850</h2>
             <small>AUC-ROC</small>
         </div>
         """, unsafe_allow_html=True)
@@ -852,7 +843,7 @@ def fraud_detection_page(classifier, model_loaded):
         st.markdown("""
         <div class="dashboard-card">
             <h4>StackingClassifier</h4>
-            <h2 style="color: white;">0.87</h2>
+            <h2 style="color: white;">0.8941</h2>
             <small>AUC-ROC</small>
         </div>
         """, unsafe_allow_html=True)
@@ -865,17 +856,17 @@ def fraud_detection_page(classifier, model_loaded):
     with col1:
         st.markdown("""
         <div class="dashboard-card">
-            <h3 style="color: white; margin-bottom: 8px;">🎯 Transaction Analysis</h3>
+            <h3 style="color: white; margin-bottom: 8px;"> Transaction Analysis</h3>
             <p style="color: rgba(255,255,255,0.8); margin-bottom: 20px;">Enter transaction details to work some AI magic ✨</p>
         """, unsafe_allow_html=True)
         
         # Transaction form - REMOVED STEP FIELD
         with st.form("transaction_form"):
-            transaction_type = st.selectbox("💸 Transaction Type", 
+            transaction_type = st.selectbox(" Transaction Type", 
                                           ["DEPOSIT", "WITHDRAWAL", "TRANSFER", "PAYMENT", "DEBIT"],
                                           help="Type of mobile money transaction")
             
-            amount = st.number_input("💰 Amount (UGX)", min_value=0.0, value=1000.0,
+            amount = st.number_input(" Amount (UGX)", min_value=0.0, value=1000.0,
                                    help="Transaction amount in Ugandan Shillings")
             
             st.markdown("**Account Information**")
@@ -900,7 +891,7 @@ def fraud_detection_page(classifier, model_loaded):
     with col2:
         st.markdown("""
         <div class="dashboard-card">
-            <h3 style="color: white; margin-bottom: 8px;">🔮 Prediction Results</h3>
+            <h3 style="color: white; margin-bottom: 8px;"> Prediction Results</h3>
             <p style="color: rgba(255,255,255,0.8); margin-bottom: 20px;">AI-powered fraud detection analysis ✨</p>
         """, unsafe_allow_html=True)
         
@@ -908,7 +899,7 @@ def fraud_detection_page(classifier, model_loaded):
             if not model_loaded:
                 st.markdown("""
                 <div class="risk-high">
-                    <h4>🚫 Model Not Loaded</h4>
+                    <h4> Model Not Loaded</h4>
                     <p>Cannot make predictions. Please ensure your model file is at: models/momtsim_fraud_model.bin</p>
                 </div>
                 """, unsafe_allow_html=True)
@@ -916,7 +907,7 @@ def fraud_detection_page(classifier, model_loaded):
                 return
             
             # Show cute loading animation
-            with st.spinner('🔮 AI is analyzing with confidence metrics...'):
+            with st.spinner(' AI is analyzing with confidence metrics...'):
                 import time
                 time.sleep(1)
                 
@@ -1313,30 +1304,25 @@ def model_info_page():
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        st.markdown("###  Model Magic Details")
-        info_data = {
-            ' Algorithm': 'XGBoost (Extreme Gradient Boosting)',
-            ' Version': 'v2.1.0',
-            ' Training Dataset': 'MomtSim (1.7M transactions)',
-            ' Data Source': 'Synthetic Sub-Saharan Africa Mobile Money',
-            ' Target Variable': 'isFraud (Binary Classification)'
-        }
-        for key, value in info_data.items():
-            st.write(f"**{key}:** {value}")
-
-    with col2:
         st.markdown("###  Performance Magic")
         metrics_data = {
-            'Accuracy': '96.8%',
-            'Precision': '94.2%',
-            'Recall': '91.7%',
-            'F1-Score': '92.9%',
-            'AUC-ROC': '0.967'
+            'Precision': '81%',
+            'Recall': '89%'
         }
         for key, value in metrics_data.items():
             st.metric(f"✨ {key}", value)
 
-    st.markdown("###  MomtSim Features Used")
+
+    with col2:
+        st.markdown("###  Performance Magic")
+        metrics_data = {
+            'F1-Score': '85 %',
+            'AUC-ROC': '89.9%'
+        }
+        for key, value in metrics_data.items():
+            st.metric(f"✨ {key}", value)
+
+    st.markdown("###  Original dataset Features Used")
     features = [
         ' step - Transaction time sequence',
         ' transactionType - Transaction category',
@@ -1352,18 +1338,6 @@ def model_info_page():
     ]
     for feature in features:
         st.write(f"• {feature}")
-
-    st.markdown("###  Model Superpowers")
-    capabilities = [
-        " Optimized for Sub-Saharan Africa fraud patterns",
-        " Real-time fraud scoring with confidence metrics",
-        " Explainable predictions with risk analysis",
-        "🇺🇬 Calibrated with local mobile money behaviors",
-        " Supports all MomtSim transaction types",
-        " Advanced confidence estimation using multiple methods"
-    ]
-    for capability in capabilities:
-        st.write(f"✓ {capability}")
 
 if __name__ == "__main__":
     main()
