@@ -82,9 +82,9 @@ streamlit/
 ├── app.py                          # Main Streamlit application
 ├── models/
 │   └── 3momtsim_fraud_model.bin   # Trained XGBoost model
-├── requirements.txt                # Python dependencies
-├── README.md                       # This file
-└── .gitignore                      # Git ignore rules
+├── Media                # Python dependencies
+├── requirements.txt                      # This file
+└── .READMe                     # Git ignore rules
 ```
 
 ##  Usage Guide
@@ -361,6 +361,7 @@ Their pioneering work has enabled AI innovation and capacity building in fraud d
 *Empowering secure mobile money transactions across Sub-Saharan Africa*
 
 </div>
+
 
 
 
