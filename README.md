@@ -24,6 +24,9 @@ Picket AI is a cutting-edge fraud detection system built specifically for Sub-Sa
 - ** Comprehensive Analytics** - Deep insights into fraud patterns and transaction trends
 - ** Demo Playground** - Pre-loaded test scenarios for quick evaluation
 
+## Google collab notebook
+https://colab.research.google.com/drive/13NNl-Zhhmm2KLV074jGpUuPMrkrC0sci?authuser=2#scrollTo=20D_CpexjHVo
+
 ##  Quick Start
 
 ### Prerequisites
@@ -37,7 +40,7 @@ pip package manager
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/picket-ai.git](https://github.com/MarthaKJ/FraudGuard-AI.git)
+git clone https://github.com/MarthaKJ/Pickel-AI.git
 cd Streamlit
 ```
 
@@ -295,6 +298,7 @@ Their pioneering work has enabled AI innovation and capacity building in fraud d
 *Empowering secure mobile money transactions across Sub-Saharan Africa*
 
 </div>
+
 
 
 
