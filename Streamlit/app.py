@@ -1213,13 +1213,14 @@ def demo_data_page(classifier, model_loaded):
             'emoji': '',
             'step': 1,
             'transactionType': 'TRANSFER',
-            'amount': 500000.0,
-            'initiator': '12345',
-            'oldBalInitiator': 500000.0,
-            'newBalInitiator': 0.0,
-            'recipient': 'M67890',
-            'oldBalRecipient': 0.0,
-            'newBalRecipient': 500000.0
+            'amount': 19824.96,
+            'initiator': '4.53703E+15',
+            'oldBalInitiator': 187712.18,
+            'newBalInitiator': 167887.22,
+            'recipient': '4.8757E+15',
+            'oldBalRecipient': 8.31,
+            'newBalRecipient': 19833.27
+
         },
         {
             'name': ' Risky Withdrawal Alert',
@@ -1275,11 +1276,11 @@ def demo_data_page(classifier, model_loaded):
                                 if fraud_score > 0.7:
                                     st.error("🚨 HIGH RISK - BLOCK")
                                 elif fraud_score > 0.4:
-                                    st.warning("⚠️ MEDIUM RISK - REVIEW")
+                                    st.warning(" MEDIUM RISK - HUMAN REVIEW REQUIRED")
                                 else:
                                     st.success("✅ LOW RISK - APPROVE")
                     else:
-                        st.error("🚫 Model not loaded")
+                        st.error(" Model not loaded")
 
 def model_info_page():
     st.markdown('<h2 class="rainbow-text">About the dataset</h2>', unsafe_allow_html=True)
