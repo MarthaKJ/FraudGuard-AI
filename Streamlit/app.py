@@ -428,13 +428,13 @@ def get_friendly_message(fraud_score, confidence_score, recommendation):
         if confidence_percent >= 70:
             messages.append(f"I'm {confidence_percent:.0f}% confident in this assessment - the patterns are clear.")
         else:
-            messages.append(f"I'm only {confidence_percent:.0f}% confident, which is too low for financial decisions - blocking for safety.")
+            messages.append(f"I'm  {confidence_percent:.0f}% confident, which is too low for financial decisions - blocking for safety.")
             
     elif recommendation == "REVIEW" or recommendation == "HUMAN_REVIEW_REQUIRED":
         if fraud_percent >= 50:
             messages.append(f"This transaction has a {fraud_percent:.0f}% fraud probability - it's in that tricky zone where human judgment is essential.")
         else:
-            messages.append(f"While the fraud score is {fraud_percent:.0f}%, my confidence is only {confidence_percent:.0f}% - too uncertain for automatic processing.")
+            messages.append(f"While the fraud score is {fraud_percent:.0f}%, my confidence is {confidence_percent:.0f}% - too uncertain for automatic processing.")
         
         messages.append(f"A human expert should definitely review this before making any decision.")
             
@@ -1213,13 +1213,14 @@ def demo_data_page(classifier, model_loaded):
             'emoji': '',
             'step': 1,
             'transactionType': 'TRANSFER',
-            'amount': 500000.0,
-            'initiator': '12345',
-            'oldBalInitiator': 500000.0,
-            'newBalInitiator': 0.0,
-            'recipient': 'M67890',
-            'oldBalRecipient': 0.0,
-            'newBalRecipient': 500000.0
+            'amount': 19824.96,
+            'initiator': '4.53703E+15',
+            'oldBalInitiator': 187712.18,
+            'newBalInitiator': 167887.22,
+            'recipient': '4.8757E+15',
+            'oldBalRecipient': 8.31,
+            'newBalRecipient': 19833.27
+
         },
         {
             'name': ' Risky Withdrawal Alert',
@@ -1275,7 +1276,7 @@ def demo_data_page(classifier, model_loaded):
                                 if fraud_score > 0.7:
                                     st.error("🚨 HIGH RISK - BLOCK")
                                 elif fraud_score > 0.4:
-                                    st.warning("⚠️ MEDIUM RISK - REVIEW")
+                                    st.warning(" MEDIUM RISK - HUMAN REVIEW REQUIRED")
                                 else:
                                     st.success("✅ LOW RISK - APPROVE")
                     else:
