@@ -833,7 +833,7 @@ def fraud_detection_page(classifier, model_loaded):
     with col3:
         st.markdown("""
         <div class="dashboard-card">
-            <h4>CatBoostClassifier (or RandomForest)</h4>
+            <h4>CatBoostClassifier</h4>
             <h2 style="color: #66bb6a;">0.8850</h2>
             <small>AUC-ROC</small>
         </div>
