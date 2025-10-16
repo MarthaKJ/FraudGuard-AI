@@ -713,11 +713,11 @@ def display_results_with_real_confidence(fraud_score, confidence_score, method_u
     friendly_message = get_friendly_message(fraud_score, confidence_score, recommendation)
     
     if base_risk == "HIGH" or recommendation == "BLOCK_LOW_CONFIDENCE":
-        st.error(f" **AI Says:** {friendly_message}")
+        st.error(f" **Pickel AI says:** {friendly_message}")
     elif base_risk == "MEDIUM" or recommendation == "HUMAN_REVIEW_REQUIRED":
-        st.warning(f" **AI Says:** {friendly_message}")
+        st.warning(f" **Pickel AI says:** {friendly_message}")
     else:
-        st.success(f" **AI Says:** {friendly_message}")
+        st.success(f" **Pickel AI says:** {friendly_message}")
     
 
 
@@ -779,19 +779,19 @@ def main():
     
     # Cute sidebar
     with st.sidebar:
-        st.markdown('<h2 class="rainbow-text">🎨 Navigation</h2>', unsafe_allow_html=True)
+        st.markdown('<h2 class="rainbow-text"> Navigation</h2>', unsafe_allow_html=True)
         page = st.radio("Choose your adventure:", [
             "Fraud Detection Magic", 
-            "Analytics Wonderland", 
+            "EDA", 
             " Demo Playground", 
-            "Model Secrets"
+            "Model Infor"
         ])
         
         st.markdown("---")
         st.subheader(" AI Status")
         if model_loaded:
             st.markdown('<div class="status-badge badge-success"> MomtSim Model Ready!</div>', unsafe_allow_html=True)
-            st.info(" Model: MomtSim XGBoost")
+            #st.info(" Model: MomtSim XGBoost")
         else:
             st.markdown('<div class="status-badge badge-error"> Model Sleeping</div>', unsafe_allow_html=True)
             st.warning(" Place your model at: models/momtsim_fraud_model.bin")
@@ -799,11 +799,11 @@ def main():
     # Main Content with cute routing
     if page == "Fraud Detection Magic":
         fraud_detection_page(classifier, model_loaded)
-    elif page == "Analytics Wonderland":
+    elif page == "EDA":
         analytics_page()
     elif page == " Demo Playground":
         demo_data_page(classifier, model_loaded)
-    elif page == "Model Secrets":
+    elif page == "Model Infor":
         model_info_page()
 
 def fraud_detection_page(classifier, model_loaded):
@@ -896,7 +896,28 @@ def fraud_detection_page(classifier, model_loaded):
         """, unsafe_allow_html=True)
         
         if submitted:
-            if not model_loaded:
+            # Validation: Check if required fields are filled
+            validation_errors = []
+            
+            if not initiator or initiator.strip() == "":
+                validation_errors.append("Initiator ID is required")
+            if not recipient or recipient.strip() == "":
+                validation_errors.append("Recipient ID is required")
+            if amount <= 0:
+                validation_errors.append("Amount must be greater than 0")
+            
+            # Display validation errors
+            if validation_errors:
+                st.markdown("""
+                <div class="risk-high">
+                    <h4>⚠️ Missing Required Fields</h4>
+                </div>
+                """, unsafe_allow_html=True)
+                for error in validation_errors:
+                    st.error(f"❌ {error}")
+                st.markdown("</div>", unsafe_allow_html=True)
+            
+            elif not model_loaded:
                 st.markdown("""
                 <div class="risk-high">
                     <h4> Model Not Loaded</h4>
@@ -904,39 +925,38 @@ def fraud_detection_page(classifier, model_loaded):
                 </div>
                 """, unsafe_allow_html=True)
                 st.markdown("</div>", unsafe_allow_html=True)
-                return
             
-            # Show cute loading animation
-            with st.spinner(' AI is analyzing with confidence metrics...'):
-                import time
-                time.sleep(1)
-                
-                # Process prediction with MomtSim structure - USING STEP=1 AS DEFAULT
-                processed_features = preprocess_transaction(
-                    1, transaction_type, amount, initiator,  # Using step=1 as default
-                    oldBalInitiator, newBalInitiator, 
-                    recipient, oldBalRecipient, newBalRecipient
-                )
-                
-                if processed_features is None:
-                    st.error(" Error processing transaction")
-                    st.markdown("</div>", unsafe_allow_html=True)
-                    return
-                
-                # Get prediction with real confidence
-                fraud_score, confidence, method, confidence_breakdown = predict_fraud_with_confidence(
-                    classifier, processed_features
-                )
-                
-                # Calculate risk factors
-                risk_factors = calculate_risk_factors(transaction_type, amount, 
-                                                    oldBalInitiator, newBalInitiator)
-                
-                # Display results with real confidence
-                display_results_with_real_confidence(
-                    fraud_score, confidence, method, confidence_breakdown, risk_factors
-                )
-            
+            else:
+                # Show cute loading animation
+                with st.spinner(' AI is analyzing with confidence metrics...'):
+                    import time
+                    time.sleep(1)
+                    
+                    # Process prediction with MomtSim structure - USING STEP=1 AS DEFAULT
+                    processed_features = preprocess_transaction(
+                        1, transaction_type, amount, initiator,  # Using step=1 as default
+                        oldBalInitiator, newBalInitiator, 
+                        recipient, oldBalRecipient, newBalRecipient
+                    )
+                    
+                    if processed_features is None:
+                        st.error(" Error processing transaction")
+                        st.markdown("</div>", unsafe_allow_html=True)
+                    else:
+                        # Get prediction with real confidence
+                        fraud_score, confidence, method, confidence_breakdown = predict_fraud_with_confidence(
+                            classifier, processed_features
+                        )
+                        
+                        # Calculate risk factors
+                        risk_factors = calculate_risk_factors(transaction_type, amount, 
+                                                            oldBalInitiator, newBalInitiator)
+                        
+                        # Display results with real confidence
+                        display_results_with_real_confidence(
+                            fraud_score, confidence, method, confidence_breakdown, risk_factors
+                        )
+        
         else:
             st.markdown("""
             <div style="text-align: center; padding: 40px; color: rgba(255,255,255,0.8);">
@@ -946,9 +966,8 @@ def fraud_detection_page(classifier, model_loaded):
             """, unsafe_allow_html=True)
         
         st.markdown("</div>", unsafe_allow_html=True)
-
 def analytics_page():
-    st.markdown('<h2 class="rainbow-text">Analytics Wonderland</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="rainbow-text">EDA</h2>', unsafe_allow_html=True)
     
     # Real dataset statistics
     col1, col2, col3, col4 = st.columns(4)
@@ -1336,21 +1355,21 @@ def demo_data_page(classifier, model_loaded):
     # Demo transactions adapted for MomtSim structure
     demo_transactions = [
         {
-            'name': ' Suspicious High-Risk Transfer',
+            'name': ' ',
             'emoji': '',
             'step': 1,
             'transactionType': 'TRANSFER',
-            'amount': 19824.96,
+            'amount': 300000,
             'initiator': '4.53703E+15',
-            'oldBalInitiator': 187712.18,
-            'newBalInitiator': 167887.22,
-            'recipient': '4.8757E+15',
-            'oldBalRecipient': 8.31,
-            'newBalRecipient': 19833.27
+            'oldBalInitiator': 400000,
+            'newBalInitiator': 500000,
+            'recipient': 'M192000',
+            'oldBalRecipient': 100000,
+            'newBalRecipient': 400000
 
         },
         {
-            'name': ' Risky Withdrawal Alert',
+            'name': ' ',
             'emoji': '',
             'step': 1,
             'transactionType': 'WITHDRAWAL',
@@ -1363,8 +1382,8 @@ def demo_data_page(classifier, model_loaded):
             'newBalRecipient': 0.0
         },
         {
-            'name': ' Happy Normal Payment',
-            'emoji': '😊',
+            'name': ' ',
+            'emoji': '',
             'step': 1,
             'transactionType': 'PAYMENT',
             'amount': 5000.0,
